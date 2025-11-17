@@ -2835,7 +2835,7 @@ void *WDL_DL_HANDLE = NULL;
 #define WDL_LOAD_SYM_STRUCT(name, struct_name) name = *(struct struct_name*)dlsym(WDL_DL_HANDLE, #name)
 
 void WDL_init() {
-  WDL_DL_HANDLE = dlopen("libwayland-client.so", RTLD_NOW | RTLD_GLOBAL);
+  WDL_DL_HANDLE = dlopen("libwayland-client.so", RTLD_LAZY | RTLD_GLOBAL);
 
   if (!WDL_DL_HANDLE) {
     fprintf(stderr, "dlopen on libwayland-client.so failed with: %s %s",

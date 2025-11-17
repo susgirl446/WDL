@@ -12,7 +12,7 @@ It is designed to be a drop-in replacement but it might not fully work and you m
 <br>
 
 ## Examples
-Currently there are no provided examples but some will come soon
+Examples can be found in the `examples/` directory, to compile simply run `gcc window.c -o window` and then run it with `./window`
 
 ## Tests
 Tests can be found in the `tests/` directory, to run them simply run
