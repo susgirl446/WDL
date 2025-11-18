@@ -2847,10 +2847,10 @@ void *WDL_DL_HANDLE = NULL;
 // ^ TODO: improve 
 
 int WDL_init() {
-  WDL_DL_HANDLE = dlopen("libwayland-client.so", RTLD_LAZY | RTLD_GLOBAL);
+  WDL_DL_HANDLE = dlopen("libwayland-client.so.0", RTLD_LAZY | RTLD_GLOBAL);
 
   if (!WDL_DL_HANDLE) {
-    fprintf(stderr, "dlopen on libwayland-client.so failed with: %s %s",
+    fprintf(stderr, "dlopen on libwayland-client.so.0 failed with: %s %s",
             dlerror(), "\n");
     return 1;
   }
