@@ -1,6 +1,6 @@
 /*
  *  WDL - The Wayland Dynamic Loader
- *  Version 0.1 for wayland-1.24
+ *  Version 0.2 for wayland-1.24
  *
  *  Options/defines:
  *  #define WDL_IMPLEMENTATION  - needed in 1 source file to include definitions
