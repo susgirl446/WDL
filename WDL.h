@@ -1,6 +1,6 @@
 /*
  *  WDL - The Wayland Dynamic Loader
- *  Version 0.1 for wayland-1.24
+ *  Version 0.2 for wayland-1.24
  *
  *  Options/defines:
  *  #define WDL_IMPLEMENTATION  - needed in 1 source file to include definitions
@@ -39,7 +39,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdio.h>
 
-void WDL_init();
+int WDL_init();
 void WDL_deinit();
 
 // start core wayland
@@ -2823,6 +2823,8 @@ const struct wl_interface xdg_popup_interface = {
 };
 #endif
 
+#define WDL_IMPLEMENTATION
+
 		// start definitions
 #ifdef WDL_IMPLEMENTATION
 
@@ -2832,43 +2834,53 @@ void *WDL_DL_HANDLE = NULL;
 
 
 #define WDL_LOAD_SYM(name) name = (PFN_##name)dlsym(WDL_DL_HANDLE, #name);
-#define WDL_LOAD_SYM_STRUCT(name, struct_name) name = *(struct struct_name*)dlsym(WDL_DL_HANDLE, #name)
+#define WDL_LOAD_SYM_STRUCT(name, struct_name) \
+    do { \
+        void* sym = dlsym(WDL_DL_HANDLE, #name); \
+        if (sym) { \
+            name = *(struct struct_name*)sym; \
+        } else { \
+            fprintf(stderr, "Warning: Failed to load %s\n", #name); \
+        } \
+    } while(0)
 
-void WDL_init() {
-  WDL_DL_HANDLE = dlopen("libwayland-client.so", RTLD_LAZY | RTLD_GLOBAL);
+// ^ TODO: improve 
+
+int WDL_init() {
+  WDL_DL_HANDLE = dlopen("libwayland-client.so.0", RTLD_LAZY | RTLD_GLOBAL);
 
   if (!WDL_DL_HANDLE) {
-    fprintf(stderr, "dlopen on libwayland-client.so failed with: %s %s",
+    fprintf(stderr, "dlopen on libwayland-client.so.0 failed with: %s %s",
             dlerror(), "\n");
-    return;
+    return 1;
   }
 
 
 
 
-wl_display_interface = WDL_LOAD_SYM_STRUCT(wl_display_interface, wl_interface);
-wl_registry_interface = WDL_LOAD_SYM_STRUCT(wl_registry_interface, wl_interface);
-wl_callback_interface = WDL_LOAD_SYM_STRUCT(wl_callback_interface, wl_interface);
-wl_compositor_interface = WDL_LOAD_SYM_STRUCT(wl_compositor_interface, wl_interface);
-wl_shm_pool_interface = WDL_LOAD_SYM_STRUCT(wl_shm_pool_interface, wl_interface);
-wl_shm_interface = WDL_LOAD_SYM_STRUCT(wl_shm_interface, wl_interface);
-wl_buffer_interface = WDL_LOAD_SYM_STRUCT(wl_buffer_interface, wl_interface);
-wl_data_offer_interface = WDL_LOAD_SYM_STRUCT(wl_data_offer_interface, wl_interface);
-wl_data_source_interface = WDL_LOAD_SYM_STRUCT(wl_data_source_interface, wl_interface);
-wl_data_device_interface = WDL_LOAD_SYM_STRUCT(wl_data_device_interface, wl_interface);
-wl_data_device_manager_interface = WDL_LOAD_SYM_STRUCT(wl_data_device_manager_interface, wl_interface);
-wl_shell_interface = WDL_LOAD_SYM_STRUCT(wl_shell_interface, wl_interface);
-wl_shell_surface_interface = WDL_LOAD_SYM_STRUCT(wl_shell_surface_interface, wl_interface);
-wl_surface_interface = WDL_LOAD_SYM_STRUCT(wl_surface_interface, wl_interface);
-wl_seat_interface = WDL_LOAD_SYM_STRUCT(wl_seat_interface, wl_interface);
-wl_pointer_interface = WDL_LOAD_SYM_STRUCT(wl_pointer_interface, wl_interface);
-wl_keyboard_interface = WDL_LOAD_SYM_STRUCT(wl_keyboard_interface, wl_interface);
-wl_touch_interface = WDL_LOAD_SYM_STRUCT(wl_touch_interface, wl_interface);
-wl_output_interface = WDL_LOAD_SYM_STRUCT(wl_output_interface, wl_interface);
-wl_region_interface = WDL_LOAD_SYM_STRUCT(wl_region_interface, wl_interface);
-wl_subcompositor_interface = WDL_LOAD_SYM_STRUCT(wl_subcompositor_interface, wl_interface);
-wl_subsurface_interface = WDL_LOAD_SYM_STRUCT(wl_subsurface_interface, wl_interface);
-wl_fixes_interface = WDL_LOAD_SYM_STRUCT(wl_fixes_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_display_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_registry_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_callback_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_compositor_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_shm_pool_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_shm_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_buffer_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_data_offer_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_data_source_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_data_device_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_data_device_manager_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_shell_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_shell_surface_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_surface_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_seat_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_pointer_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_keyboard_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_touch_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_output_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_region_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_subcompositor_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_subsurface_interface, wl_interface);
+WDL_LOAD_SYM_STRUCT(wl_fixes_interface, wl_interface);
 
 
 WDL_LOAD_SYM(wl_event_queue_destroy)
@@ -2955,6 +2967,8 @@ WDL_LOAD_SYM(wl_display_set_max_buffer_size)
   xdg_shell_types[25] = NULL;
 
 #endif
+
+return 0;
 }
 
 void WDL_deinit() { dlclose(WDL_DL_HANDLE); }
