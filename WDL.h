@@ -38,6 +38,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdarg.h>
 
 int WDL_init();
 void WDL_deinit();
