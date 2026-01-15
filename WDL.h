@@ -89,6 +89,30 @@ struct wl_interface {
 	const struct wl_message *events;
 };
 
+struct wl_list {
+	struct wl_list* prev;
+	struct wl_list* next;
+};
+
+typedef void 	(*PFN_wl_list_init)(struct wl_list*);
+typedef void  	(*PFN_wl_list_insert)(struct wl_list*, struct wl_list*);
+typedef void	(*PFN_wl_list_remove)(struct wl_list*);
+typedef int 	(*PFN_wl_list_length)(const struct wl_list*);
+typedef int 	(*PFN_wl_list_empty)(const struct wl_list*);
+typedef void 	(*PFN_wl_list_insert_list)(struct wl_list*, struct wl_list*);
+
+PFN_wl_list_init 		wl_list_init; 
+PFN_wl_list_insert 		wl_list_insert;
+PFN_wl_list_length		wl_list_length;
+PFN_wl_list_empty		wl_list_empty;
+PFN_wl_list_insert_list wl_list_insert_list;
+
+#define wl_container_of(ptr, sample, member) (typeof(sample))((char*)(ptr) - offsetof(typeof(*sample), member))
+#define wl_list_for_each(pos, head, member) for (pos = wl_container_of((head)->next, pos, member); &pos->member != (head); pos = wl_container_of(pos->member.next, pos, member))
+#define wl_list_for_each_safe(pos, tmp, head, member) for (pos = wl_container_of((head)->next, pos, member), tmp = wl_container_of((pos)->member.next, tmp, member); &pos->member != (head); pos = tmp, tmp = wl_container_of(pos->member.next, tmp, member))
+#define wl_list_for_each_reverse(pos, head, member)	for (pos = wl_container_of((head)->prev, pos, member);&pos->member != (head); pos = wl_container_of(pos->member.prev, pos, member))
+
+
 
 // wayland-client-core
 #define WL_MARSHAL_FLAG_DESTROY (1 << 0)
