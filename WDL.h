@@ -5,6 +5,7 @@
  *  Options/defines:
  *  #define WDL_IMPLEMENTATION  - needed in 1 source file to include definitions
  *  #define WDL_NO_XDG          - do not include xdg related code
+ *	#define WDL_NO_CURSOR		- disable wayland-cursor support
  *
  *
  *  Support:
@@ -2824,17 +2825,52 @@ const struct wl_interface xdg_popup_interface = {
 };
 #endif
 
-#define WDL_IMPLEMENTATION
 
-		// start definitions
+#ifndef WDL_NO_CURSOR
+struct wl_cursor_theme; // in wayland/cursor/wayland-cursor.c
+
+struct wl_cursor_image {
+	uint32_t width;
+	uint32_t height;
+	uint32_t hotspot_x;
+	uint32_t hotspot_y;
+	uint32_t delay;
+};
+
+struct wl_cursor {
+	unsigned int image_count;
+	struct wl_cursor_image** images;
+	char* name;
+};
+
+typedef struct wl_cursor_theme*		(*PFN_wl_cursor_theme_load)(const char*, int, struct wl_shm*);
+typedef void						(*PFN_wl_cursor_theme_destroy)(struct wl_cursor_theme*);
+typedef struct wl_cursor*			(*PFN_wl_cursor_theme_get_cursor)(struct wl_cursor_theme*, const char*);
+typedef struct wl_buffer*			(*PFN_wl_cursor_image_get_buffer)(struct wl_cursor_image*);
+typedef int 						(*PFN_wl_cursor_frame)(struct wl_cursor*, uint32_t);
+typedef int							(*PFN_wl_cursor_frame_and_duration)(struct wl_cursor*, uint32_t, uint32_t*);
+
+PFN_wl_cursor_theme_load 			wl_cursor_theme_load; 
+PFN_wl_cursor_theme_destroy			wl_cursor_theme_destroy; 
+PFN_wl_cursor_theme_get_cursor		wl_cursor_theme_get_cursor;
+PFN_wl_cursor_image_get_buffer		wl_cursor_image_get_buffer;
+PFN_wl_cursor_frame					wl_cursor_frame;
+PFN_wl_cursor_frame_and_duration	wl_cursor_frame_and_duration;
+#endif // WDL_NO_CURSOR
+
+
+// start definitions
 #ifdef WDL_IMPLEMENTATION
 
 #include <dlfcn.h>
 
 void *WDL_DL_HANDLE = NULL;
+void *WDL_CURSOR_DL_HANDLE = NULL;
 
 
 #define WDL_LOAD_SYM(name) name = (PFN_##name)dlsym(WDL_DL_HANDLE, #name);
+#define WDL_LOAD_CURSOR_SYM(name) name = (PFN_##name)dlsym(WDL_CURSOR_DL_HANDLE, #name);
+
 #define WDL_LOAD_SYM_STRUCT(name, struct_name) \
     do { \
         void* sym = dlsym(WDL_DL_HANDLE, #name); \
@@ -2848,7 +2884,7 @@ void *WDL_DL_HANDLE = NULL;
 // ^ TODO: improve 
 
 int WDL_init() {
-  WDL_DL_HANDLE = dlopen("libwayland-client.so.0", RTLD_LAZY | RTLD_GLOBAL);
+  	WDL_DL_HANDLE = dlopen("libwayland-client.so.0", RTLD_LAZY | RTLD_GLOBAL);
 
   	if (!WDL_DL_HANDLE) {
 		fprintf(stderr, "dlopen on libwayland-client.so.0 failed with: %s %s",
@@ -2964,7 +3000,17 @@ int WDL_init() {
 	xdg_shell_types[23] = NULL;
 	xdg_shell_types[24] = &xdg_positioner_interface;
 	xdg_shell_types[25] = NULL;
+	#endif
 
+	#ifndef WDL_NO_CURSOR
+
+
+	WDL_LOAD_CURSOR_SYM(wl_cursor_theme_load);
+	WDL_LOAD_CURSOR_SYM(wl_cursor_theme_destroy);
+	WDL_LOAD_CURSOR_SYM(wl_cursor_theme_get_cursor);
+	WDL_LOAD_CURSOR_SYM(wl_cursor_image_get_buffer);
+	WDL_LOAD_CURSOR_SYM(wl_cursor_frame);
+	WDL_LOAD_CURSOR_SYM(wl_cursor_frame_and_duration);
 	#endif
 
 	return 0;
