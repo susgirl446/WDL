@@ -107,7 +107,7 @@ PFN_wl_list_length		wl_list_length;
 PFN_wl_list_empty		wl_list_empty;
 PFN_wl_list_insert_list wl_list_insert_list;
 
-#define wl_container_of(ptr, sample, member) (typeof(sample))((char*)(ptr) - offsetof(typeof(*sample), member))
+#define wl_container_of(ptr, sample, member) (__typeof__(sample))((char*)(ptr) - offsetof(__typeof__(*sample), member))
 #define wl_list_for_each(pos, head, member) for (pos = wl_container_of((head)->next, pos, member); &pos->member != (head); pos = wl_container_of(pos->member.next, pos, member))
 #define wl_list_for_each_safe(pos, tmp, head, member) for (pos = wl_container_of((head)->next, pos, member), tmp = wl_container_of((pos)->member.next, tmp, member); &pos->member != (head); pos = tmp, tmp = wl_container_of(pos->member.next, tmp, member))
 #define wl_list_for_each_reverse(pos, head, member)	for (pos = wl_container_of((head)->prev, pos, member);&pos->member != (head); pos = wl_container_of(pos->member.prev, pos, member))
