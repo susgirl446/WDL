@@ -4,8 +4,11 @@
  *
  *  Options/defines:
  *  #define WDL_IMPLEMENTATION  - needed in 1 source file to include definitions
- *  #define WDL_NO_XDG          - do not include xdg related code
- *	#define WDL_NO_CURSOR		- disable wayland-cursor support
+ *  #define WDL_NO_XDG          		- do not include xdg related code
+ *	#define WDL_NO_CURSOR				- disable wayland-cursor support
+ *	#define WDL_NO_FRACTIONAL_SCALE		- disable inclusion of fractional scaling protocol
+ * 	#define WDL_NO_VIEWPORT				- disable viewporter protocol
+ *
  *
  *
  *  Support:
@@ -32,6 +35,7 @@
  */
 
 #pragma once
+
 
 
 #ifdef __cplusplus
@@ -2984,6 +2988,112 @@ static inline void wp_fractional_scale_v1_destroy(struct wp_fractional_scale_v1 
 
 
 #endif // WDL_NO_FRACTIONAL_SCALE
+
+
+#ifndef WDL_NO_VIEWPORTER
+struct wp_viewport;
+struct wp_viewporter;
+
+
+const struct wl_interface wp_viewport_interface;
+
+static const struct wl_interface *viewporter_types[] = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	&wp_viewport_interface,
+	&wl_surface_interface,
+};
+
+static const struct wl_message wp_viewporter_requests[] = {
+	{ "destroy", "", viewporter_types + 0 },
+	{ "get_viewport", "no", viewporter_types + 4 },
+};
+
+const struct wl_interface wp_viewporter_interface = {
+	"wp_viewporter", 1,
+	2, wp_viewporter_requests,
+	0, NULL,
+};
+
+static const struct wl_message wp_viewport_requests[] = {
+	{ "destroy", "", viewporter_types + 0 },
+	{ "set_source", "ffff", viewporter_types + 0 },
+	{ "set_destination", "ii", viewporter_types + 0 },
+};
+
+const struct wl_interface wp_viewport_interface = {
+	"wp_viewport", 1,
+	3, wp_viewport_requests,
+	0, NULL,
+};
+
+#define WP_VIEWPORTER_DESTROY 0
+#define WP_VIEWPORTER_GET_VIEWPORT 1
+#define WP_VIEWPORT_DESTROY 0
+#define WP_VIEWPORT_SET_SOURCE 1
+#define WP_VIEWPORT_SET_DESTINATION 2
+
+enum wp_viewporter_error {
+	WP_VIEWPORTER_ERROR_VIEWPORT_EXISTS = 0
+};
+
+static inline void wp_viewporter_set_user_data(struct wp_viewporter* wp_viewporter, void* user_data) {
+	wl_proxy_set_user_data((struct wl_proxy*)wp_viewporter, user_data);
+}
+
+static inline void* wp_viewporter_get_user_data(struct wp_viewporter* wp_viewporter) {
+	return wl_proxy_get_user_data((struct wl_proxy*)wp_viewporter);
+}
+
+static inline uint32_t wp_viewporter_get_version(struct wp_viewporter* wp_viewporter) {
+	return wl_proxy_get_version((struct wl_proxy*)wp_viewporter);
+}
+
+static inline void wp_viewporter_destroy(struct wp_viewporter* wp_viewporter) {
+	wl_proxy_marshal_flags((struct wl_proxy*)wp_viewporter, WP_VIEWPORTER_DESTROY, NULL, wl_proxy_get_version((struct wl_proxy*)wp_viewporter), WL_MARSHAL_FLAG_DESTROY);
+}
+
+static inline struct wp_viewport* wp_viewporter_get_viewporrt(struct wp_viewporter* wp_viewporter, struct wl_surface* surface) {
+	return (struct wp_viewport*)wl_proxy_marshal_flags((struct wl_proxy*)wp_viewporter, WP_VIEWPORTER_GET_VIEWPORT, &wp_viewport_interface, wl_proxy_get_version((struct wl_proxy*)wp_viewporter), 0, NULL, surface);
+}
+
+static inline void wp_viewport_set_user_data(struct wp_viewport *wp_viewport, void *user_data) {
+	wl_proxy_set_user_data((struct wl_proxy *) wp_viewport, user_data);
+}
+
+static inline void * wp_viewport_get_user_data(struct wp_viewport *wp_viewport) {
+	return wl_proxy_get_user_data((struct wl_proxy *) wp_viewport);
+}
+
+static inline uint32_t wp_viewport_get_version(struct wp_viewport *wp_viewport)
+{
+	return wl_proxy_get_version((struct wl_proxy *) wp_viewport);
+}
+
+static inline void wp_viewport_destroy(struct wp_viewport *wp_viewport) {
+	wl_proxy_marshal_flags((struct wl_proxy *) wp_viewport, WP_VIEWPORT_DESTROY, NULL, wl_proxy_get_version((struct wl_proxy *) wp_viewport), WL_MARSHAL_FLAG_DESTROY);
+}
+
+static inline void wp_viewport_set_source(struct wp_viewport *wp_viewport, wl_fixed_t x, wl_fixed_t y, wl_fixed_t width, wl_fixed_t height) {
+	wl_proxy_marshal_flags((struct wl_proxy *) wp_viewport, WP_VIEWPORT_SET_SOURCE, NULL, wl_proxy_get_version((struct wl_proxy *) wp_viewport), 0, x, y, width, height);
+}
+
+static inline void wp_viewport_set_destination(struct wp_viewport *wp_viewport, int32_t width, int32_t height) {
+	wl_proxy_marshal_flags((struct wl_proxy *) wp_viewport, WP_VIEWPORT_SET_DESTINATION, NULL, wl_proxy_get_version((struct wl_proxy *) wp_viewport), 0, width, height);
+}
+
+enum wp_viewport_error {
+	WP_VIEWPORT_ERROR_BAD_VALUE = 0,
+	WP_VIEWPORT_ERROR_BAD_SIZE = 1,
+	WP_VIEWPORT_ERROR_OUT_OF_BUFFER = 2,
+	WP_VIEWPORT_ERROR_NO_SURFACE = 3,
+};
+
+
+
+#endif // WDL_NO_VIEWPORTER
 
 
 // start definitions
