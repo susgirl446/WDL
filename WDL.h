@@ -105,11 +105,11 @@ typedef int 	(*PFN_wl_list_length)(const struct wl_list*);
 typedef int 	(*PFN_wl_list_empty)(const struct wl_list*);
 typedef void 	(*PFN_wl_list_insert_list)(struct wl_list*, struct wl_list*);
 
-PFN_wl_list_init 		wl_list_init; 
-PFN_wl_list_insert 		wl_list_insert;
-PFN_wl_list_length		wl_list_length;
-PFN_wl_list_empty		wl_list_empty;
-PFN_wl_list_insert_list wl_list_insert_list;
+static PFN_wl_list_init 		wl_list_init; 
+static PFN_wl_list_insert 		wl_list_insert;
+static PFN_wl_list_length		wl_list_length;
+static PFN_wl_list_empty		wl_list_empty;
+static PFN_wl_list_insert_list wl_list_insert_list;
 
 #define wl_container_of(ptr, sample, member) (__typeof__(sample))((char*)(ptr) - offsetof(__typeof__(*sample), member))
 #define wl_list_for_each(pos, head, member) for (pos = wl_container_of((head)->next, pos, member); &pos->member != (head); pos = wl_container_of(pos->member.next, pos, member))
@@ -180,56 +180,56 @@ typedef void                        (*PFN_wl_log_set_handler_client)(wl_log_func
 typedef void                        (*PFN_wl_display_set_max_buffer_size)(struct wl_display*, size_t);
 
  
-PFN_wl_event_queue_destroy                            wl_event_queue_destroy;
-PFN_wl_proxy_marshal_flags                            wl_proxy_marshal_flags;
-PFN_wl_proxy_marshal_array_flags                      wl_proxy_marshal_array_flags;
-PFN_wl_proxy_marshal                                  wl_proxy_marshal;
-PFN_wl_proxy_marshal_array                            wl_proxy_marshal_array;
-PFN_wl_proxy_create                                   wl_proxy_create;
-PFN_wl_proxy_create_wrapper                           wl_proxy_create_wrapper;
-PFN_wl_proxy_wrapper_destroy                          wl_proxy_wrapper_destroy;
-PFN_wl_proxy_marshal_constructor_versioned            wl_proxy_marshal_constructor_versioned;
-PFN_wl_proxy_marshal_array_constructor                wl_proxy_marshal_array_constructor;
-PFN_wl_proxy_marshal_array_constructor_versioned      wl_proxy_marshal_array_constructor_versioned;
-PFN_wl_proxy_destroy                                  wl_proxy_destroy;
-PFN_wl_proxy_add_listener                             wl_proxy_add_listener;
-PFN_wl_proxy_get_listener                             wl_proxy_get_listener;
-PFN_wl_proxy_add_dispatcher                           wl_proxy_add_dispatcher;
-PFN_wl_proxy_set_user_data                            wl_proxy_set_user_data;
-PFN_wl_proxy_get_user_data                            wl_proxy_get_user_data;
-PFN_wl_proxy_get_version                              wl_proxy_get_version;
-PFN_wl_proxy_get_id                                   wl_proxy_get_id;
-PFN_wl_proxy_set_tag                                  wl_proxy_set_tag;
-PFN_wl_proxy_get_tag                                  wl_proxy_get_tag;
-PFN_wl_proxy_get_class                                wl_proxy_get_class;
-PFN_wl_proxy_get_interface                            wl_proxy_get_interface;
-PFN_wl_proxy_get_display                              wl_proxy_get_display;
-PFN_wl_proxy_set_queue                                wl_proxy_set_queue;
-PFN_wl_proxy_get_queue                                wl_proxy_get_queue;
-PFN_wl_event_queue_get_name                           wl_event_queue_get_name;
-PFN_wl_display_connect                                wl_display_connect;
-PFN_wl_display_connect_to_fd                          wl_display_connect_to_fd;
-PFN_wl_display_disconnect                             wl_display_disconnect;
-PFN_wl_display_get_fd                                 wl_display_get_fd;
-PFN_wl_display_dispatch                               wl_display_dispatch;
-PFN_wl_display_dispatch_queue                         wl_display_dispatch_queue;
-PFN_wl_display_dispatch_timeout                       wl_display_dispatch_timeout;
-PFN_wl_display_dispatch_queue_timeout                 wl_display_dispatch_queue_timeout;
-PFN_wl_display_dispatch_queue_pending                 wl_display_dispatch_queue_pending;
-PFN_wl_display_dispatch_pending                       wl_display_dispatch_pending;
-PFN_wl_display_get_error                              wl_display_get_error;
-PFN_wl_display_get_protocol_error                     wl_display_get_protocol_error;
-PFN_wl_display_flush                                  wl_display_flush;
-PFN_wl_display_roundtrip_queue                        wl_display_roundtrip_queue;
-PFN_wl_display_roundtrip                              wl_display_roundtrip;
-PFN_wl_display_create_queue                           wl_display_create_queue;
-PFN_wl_display_create_queue_with_name                 wl_display_create_queue_with_name; 
-PFN_wl_display_prepare_read_queue                     wl_display_prepare_read_queue;
-PFN_wl_display_prepare_read                           wl_display_prepare_read;
-PFN_wl_display_cancel_read                            wl_display_cancel_read;
-PFN_wl_display_read_events                            wl_display_read_events;
-PFN_wl_log_set_handler_client                         wl_log_set_handler_client;
-PFN_wl_display_set_max_buffer_size                    wl_display_set_max_buffer_size;
+static PFN_wl_event_queue_destroy                            wl_event_queue_destroy;
+static PFN_wl_proxy_marshal_flags                            wl_proxy_marshal_flags;
+static PFN_wl_proxy_marshal_array_flags                      wl_proxy_marshal_array_flags;
+static PFN_wl_proxy_marshal                                  wl_proxy_marshal;
+static PFN_wl_proxy_marshal_array                            wl_proxy_marshal_array;
+static PFN_wl_proxy_create                                   wl_proxy_create;
+static PFN_wl_proxy_create_wrapper                           wl_proxy_create_wrapper;
+static PFN_wl_proxy_wrapper_destroy                          wl_proxy_wrapper_destroy;
+static PFN_wl_proxy_marshal_constructor_versioned            wl_proxy_marshal_constructor_versioned;
+static PFN_wl_proxy_marshal_array_constructor                wl_proxy_marshal_array_constructor;
+static PFN_wl_proxy_marshal_array_constructor_versioned      wl_proxy_marshal_array_constructor_versioned;
+static PFN_wl_proxy_destroy                                  wl_proxy_destroy;
+static PFN_wl_proxy_add_listener                             wl_proxy_add_listener;
+static PFN_wl_proxy_get_listener                             wl_proxy_get_listener;
+static PFN_wl_proxy_add_dispatcher                           wl_proxy_add_dispatcher;
+static PFN_wl_proxy_set_user_data                            wl_proxy_set_user_data;
+static PFN_wl_proxy_get_user_data                            wl_proxy_get_user_data;
+static PFN_wl_proxy_get_version                              wl_proxy_get_version;
+static PFN_wl_proxy_get_id                                   wl_proxy_get_id;
+static PFN_wl_proxy_set_tag                                  wl_proxy_set_tag;
+static PFN_wl_proxy_get_tag                                  wl_proxy_get_tag;
+static PFN_wl_proxy_get_class                                wl_proxy_get_class;
+static PFN_wl_proxy_get_interface                            wl_proxy_get_interface;
+static PFN_wl_proxy_get_display                              wl_proxy_get_display;
+static PFN_wl_proxy_set_queue                                wl_proxy_set_queue;
+static PFN_wl_proxy_get_queue                                wl_proxy_get_queue;
+static PFN_wl_event_queue_get_name                           wl_event_queue_get_name;
+static PFN_wl_display_connect                                wl_display_connect;
+static PFN_wl_display_connect_to_fd                          wl_display_connect_to_fd;
+static PFN_wl_display_disconnect                             wl_display_disconnect;
+static PFN_wl_display_get_fd                                 wl_display_get_fd;
+static PFN_wl_display_dispatch                               wl_display_dispatch;
+static PFN_wl_display_dispatch_queue                         wl_display_dispatch_queue;
+static PFN_wl_display_dispatch_timeout                       wl_display_dispatch_timeout;
+static PFN_wl_display_dispatch_queue_timeout                 wl_display_dispatch_queue_timeout;
+static PFN_wl_display_dispatch_queue_pending                 wl_display_dispatch_queue_pending;
+static PFN_wl_display_dispatch_pending                       wl_display_dispatch_pending;
+static PFN_wl_display_get_error                              wl_display_get_error;
+static PFN_wl_display_get_protocol_error                     wl_display_get_protocol_error;
+static PFN_wl_display_flush                                  wl_display_flush;
+static PFN_wl_display_roundtrip_queue                        wl_display_roundtrip_queue;
+static PFN_wl_display_roundtrip                              wl_display_roundtrip;
+static PFN_wl_display_create_queue                           wl_display_create_queue;
+static PFN_wl_display_create_queue_with_name                 wl_display_create_queue_with_name; 
+static PFN_wl_display_prepare_read_queue                     wl_display_prepare_read_queue;
+static PFN_wl_display_prepare_read                           wl_display_prepare_read;
+static PFN_wl_display_cancel_read                            wl_display_cancel_read;
+static PFN_wl_display_read_events                            wl_display_read_events;
+static PFN_wl_log_set_handler_client                         wl_log_set_handler_client;
+static PFN_wl_display_set_max_buffer_size                    wl_display_set_max_buffer_size;
 
 
 // wayland-client-protocol
@@ -259,95 +259,95 @@ struct wl_touch;
 
 #ifndef WL_DISPLAY_INTERFACE
 #define WL_DISPLAY_INTERFACE
-struct wl_interface wl_display_interface = {};
+static struct wl_interface wl_display_interface = {};
 #endif
 #ifndef WL_REGISTRY_INTERFACE
 #define WL_REGISTRY_INTERFACE
-struct wl_interface wl_registry_interface = {};
+static struct wl_interface wl_registry_interface = {};
 #endif
 #ifndef WL_CALLBACK_INTERFACE
 #define WL_CALLBACK_INTERFACE
-struct wl_interface wl_callback_interface = {};
+static struct wl_interface wl_callback_interface = {};
 #endif
 #ifndef WL_COMPOSITOR_INTERFACE
 #define WL_COMPOSITOR_INTERFACE
-struct wl_interface wl_compositor_interface = {};
+static struct wl_interface wl_compositor_interface = {};
 #endif
 #ifndef WL_SHM_POOL_INTERFACE
 #define WL_SHM_POOL_INTERFACE
-struct wl_interface wl_shm_pool_interface = {};
+static struct wl_interface wl_shm_pool_interface = {};
 #endif
 #ifndef WL_SHM_INTERFACE
 #define WL_SHM_INTERFACE
-struct wl_interface wl_shm_interface = {};
+static struct wl_interface wl_shm_interface = {};
 #endif
 #ifndef WL_BUFFER_INTERFACE
 #define WL_BUFFER_INTERFACE
-struct wl_interface wl_buffer_interface = {};
+static struct wl_interface wl_buffer_interface = {};
 #endif
 #ifndef WL_DATA_OFFER_INTERFACE
 #define WL_DATA_OFFER_INTERFACE
-struct wl_interface wl_data_offer_interface = {};
+static struct wl_interface wl_data_offer_interface = {};
 #endif
 #ifndef WL_DATA_SOURCE_INTERFACE
 #define WL_DATA_SOURCE_INTERFACE
-struct wl_interface wl_data_source_interface = {};
+static struct wl_interface wl_data_source_interface = {};
 #endif
 #ifndef WL_DATA_DEVICE_INTERFACE
 #define WL_DATA_DEVICE_INTERFACE
-struct wl_interface wl_data_device_interface = {};
+static struct wl_interface wl_data_device_interface = {};
 #endif
 #ifndef WL_DATA_DEVICE_MANAGER_INTERFACE
 #define WL_DATA_DEVICE_MANAGER_INTERFACE
-struct wl_interface wl_data_device_manager_interface = {};
+static struct wl_interface wl_data_device_manager_interface = {};
 #endif
 #ifndef WL_SHELL_INTERFACE
 #define WL_SHELL_INTERFACE
-struct wl_interface wl_shell_interface = {};
+static struct wl_interface wl_shell_interface = {};
 #endif
 #ifndef WL_SHELL_SURFACE_INTERFACE
 #define WL_SHELL_SURFACE_INTERFACE
-struct wl_interface wl_shell_surface_interface = {};
+static struct wl_interface wl_shell_surface_interface = {};
 #endif
 #ifndef WL_SURFACE_INTERFACE
 #define WL_SURFACE_INTERFACE
-struct wl_interface wl_surface_interface = {};
+static struct wl_interface wl_surface_interface = {};
 #endif
 #ifndef WL_SEAT_INTERFACE
 #define WL_SEAT_INTERFACE
-struct wl_interface wl_seat_interface = {};
+static struct wl_interface wl_seat_interface = {};
 #endif
 #ifndef WL_POINTER_INTERFACE
 #define WL_POINTER_INTERFACE
-struct wl_interface wl_pointer_interface = {};
+static struct wl_interface wl_pointer_interface = {};
 #endif
 #ifndef WL_KEYBOARD_INTERFACE
 #define WL_KEYBOARD_INTERFACE
-struct wl_interface wl_keyboard_interface = {};
+static struct wl_interface wl_keyboard_interface = {};
 #endif
 #ifndef WL_TOUCH_INTERFACE
 #define WL_TOUCH_INTERFACE
-struct wl_interface wl_touch_interface = {};
+static struct wl_interface wl_touch_interface = {};
 #endif
 #ifndef WL_OUTPUT_INTERFACE
 #define WL_OUTPUT_INTERFACE
-struct wl_interface wl_output_interface = {};
+static struct wl_interface wl_output_interface = {};
 #endif
 #ifndef WL_REGION_INTERFACE
 #define WL_REGION_INTERFACE
-struct wl_interface wl_region_interface = {};
+static struct wl_interface wl_region_interface = {};
 #endif
 #ifndef WL_SUBCOMPOSITOR_INTERFACE
 #define WL_SUBCOMPOSITOR_INTERFACE
-struct wl_interface wl_subcompositor_interface = {};
+static struct wl_interface wl_subcompositor_interface = {};
 #endif
 #ifndef WL_SUBSURFACE_INTERFACE
 #define WL_SUBSURFACE_INTERFACE
-struct wl_interface wl_subsurface_interface = {};
+static struct wl_interface wl_subsurface_interface = {};
 #endif
 #ifndef WL_FIXES_INTERFACE
 #define WL_FIXES_INTERFACE
-struct wl_interface wl_fixes_interface = {};
+static struct wl_interface wl_fixes_interface = {};
 #endif
 
 
@@ -2157,11 +2157,11 @@ struct xdg_surface;
 struct xdg_toplevel;
 struct xdg_wm_base;
 
-extern const struct wl_interface xdg_wm_base_interface;
-extern const struct wl_interface xdg_positioner_interface;
-extern const struct wl_interface xdg_surface_interface;
-extern const struct wl_interface xdg_toplevel_interface;
-extern const struct wl_interface xdg_popup_interface;
+static const struct wl_interface xdg_wm_base_interface;
+static const struct wl_interface xdg_positioner_interface;
+static const struct wl_interface xdg_surface_interface;
+static const struct wl_interface xdg_toplevel_interface;
+static const struct wl_interface xdg_popup_interface;
 
 enum xdg_wm_base_error {
   XDG_WM_BASE_ERROR_ROLE = 0,
@@ -2752,14 +2752,12 @@ static inline void xdg_popup_reposition(struct xdg_popup *xdg_popup,
       wl_proxy_get_version((struct wl_proxy *)xdg_popup), 0, positioner, token);
 }
 
-extern const struct wl_interface
-    xdg_popup_interface; // arent really external but it works in the
-                         // wayland-scanner code so why shouldnt it here
-extern const struct wl_interface xdg_positioner_interface;
-extern const struct wl_interface xdg_surface_interface;
-extern const struct wl_interface xdg_toplevel_interface;
+static const struct wl_interface xdg_popup_interface;
+static const struct wl_interface xdg_positioner_interface;
+static const struct wl_interface xdg_surface_interface;
+static const struct wl_interface xdg_toplevel_interface;
 
-const struct wl_interface *xdg_shell_types[26];
+static const struct wl_interface *xdg_shell_types[26];
 
 static const struct wl_message xdg_wm_base_requests[] = {
     {"destroy", "", xdg_shell_types + 0},
@@ -2772,7 +2770,7 @@ static const struct wl_message xdg_wm_base_events[] = {
     {"ping", "u", xdg_shell_types + 0},
 };
 
-const struct wl_interface xdg_wm_base_interface = {
+static const struct wl_interface xdg_wm_base_interface = {
     "xdg_wm_base", 7, 4, xdg_wm_base_requests, 1, xdg_wm_base_events,
 };
 
@@ -2789,7 +2787,7 @@ static const struct wl_message xdg_positioner_requests[] = {
     {"set_parent_configure", "3u", xdg_shell_types + 0},
 };
 
-const struct wl_interface xdg_positioner_interface = {
+static const struct wl_interface xdg_positioner_interface = {
     "xdg_positioner", 7, 10, xdg_positioner_requests, 0, NULL,
 };
 
@@ -2805,7 +2803,7 @@ static const struct wl_message xdg_surface_events[] = {
     {"configure", "u", xdg_shell_types + 0},
 };
 
-const struct wl_interface xdg_surface_interface = {
+static const struct wl_interface xdg_surface_interface = {
     "xdg_surface", 7, 5, xdg_surface_requests, 1, xdg_surface_events,
 };
 
@@ -2833,7 +2831,7 @@ static const struct wl_message xdg_toplevel_events[] = {
     {"wm_capabilities", "5a", xdg_shell_types + 0},
 };
 
-const struct wl_interface xdg_toplevel_interface = {
+static const struct wl_interface xdg_toplevel_interface = {
     "xdg_toplevel", 7, 14, xdg_toplevel_requests, 4, xdg_toplevel_events,
 };
 
@@ -2849,7 +2847,7 @@ static const struct wl_message xdg_popup_events[] = {
     {"repositioned", "3u", xdg_shell_types + 0},
 };
 
-const struct wl_interface xdg_popup_interface = {
+static const struct wl_interface xdg_popup_interface = {
     "xdg_popup", 7, 3, xdg_popup_requests, 3, xdg_popup_events,
 };
 #endif
@@ -2879,12 +2877,12 @@ typedef struct wl_buffer*			(*PFN_wl_cursor_image_get_buffer)(struct wl_cursor_i
 typedef int 						(*PFN_wl_cursor_frame)(struct wl_cursor*, uint32_t);
 typedef int							(*PFN_wl_cursor_frame_and_duration)(struct wl_cursor*, uint32_t, uint32_t*);
 
-PFN_wl_cursor_theme_load 			wl_cursor_theme_load; 
-PFN_wl_cursor_theme_destroy			wl_cursor_theme_destroy; 
-PFN_wl_cursor_theme_get_cursor		wl_cursor_theme_get_cursor;
-PFN_wl_cursor_image_get_buffer		wl_cursor_image_get_buffer;
-PFN_wl_cursor_frame					wl_cursor_frame;
-PFN_wl_cursor_frame_and_duration	wl_cursor_frame_and_duration;
+static PFN_wl_cursor_theme_load 			wl_cursor_theme_load; 
+static PFN_wl_cursor_theme_destroy			wl_cursor_theme_destroy; 
+static PFN_wl_cursor_theme_get_cursor		wl_cursor_theme_get_cursor;
+static PFN_wl_cursor_image_get_buffer		wl_cursor_image_get_buffer;
+static PFN_wl_cursor_frame					wl_cursor_frame;
+static PFN_wl_cursor_frame_and_duration	wl_cursor_frame_and_duration;
 #endif // WDL_NO_CURSOR
 
 
@@ -2906,7 +2904,7 @@ PFN_wl_cursor_frame_and_duration	wl_cursor_frame_and_duration;
 struct wp_fractional_scale_manager_v1;
 struct wp_fractional_scale_v1;
 
-struct wl_interface wp_fractional_scale_v1_interface;
+static struct wl_interface wp_fractional_scale_v1_interface;
 
 
 struct wp_fractional_scale_v1_listener {
@@ -2926,7 +2924,7 @@ static const struct wl_message wp_fractional_scale_manager_v1_requests[] = {
 	{ "get_fractional_scale", "no", fractional_scale_v1_types + 1 },
 };
 
-const struct wl_interface wp_fractional_scale_manager_v1_interface = {
+static const struct wl_interface wp_fractional_scale_manager_v1_interface = {
 	"wp_fractional_scale_manager_v1", 1,
 	2, wp_fractional_scale_manager_v1_requests,
 	0, NULL,
@@ -2995,7 +2993,7 @@ struct wp_viewport;
 struct wp_viewporter;
 
 
-const struct wl_interface wp_viewport_interface;
+static const struct wl_interface wp_viewport_interface;
 
 static const struct wl_interface *viewporter_types[] = {
 	NULL,
@@ -3011,7 +3009,7 @@ static const struct wl_message wp_viewporter_requests[] = {
 	{ "get_viewport", "no", viewporter_types + 4 },
 };
 
-const struct wl_interface wp_viewporter_interface = {
+static const struct wl_interface wp_viewporter_interface = {
 	"wp_viewporter", 1,
 	2, wp_viewporter_requests,
 	0, NULL,
@@ -3023,7 +3021,7 @@ static const struct wl_message wp_viewport_requests[] = {
 	{ "set_destination", "ii", viewporter_types + 0 },
 };
 
-const struct wl_interface wp_viewport_interface = {
+static const struct wl_interface wp_viewport_interface = {
 	"wp_viewport", 1,
 	3, wp_viewport_requests,
 	0, NULL,
@@ -3114,7 +3112,7 @@ void *WDL_CURSOR_DL_HANDLE = NULL;
         if (sym) { \
             name = *(struct struct_name*)sym; \
         } else { \
-            fprintf(stderr, "Warning: Failed to load %s\n", #name); \
+            fprintf(stderr, "Warning Failed to load %s\n", #name); \
         } \
     } while(0)
 
